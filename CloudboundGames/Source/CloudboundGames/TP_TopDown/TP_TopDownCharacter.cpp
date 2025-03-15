@@ -76,7 +76,7 @@ void ATP_TopDownCharacter::ResetRollCooldown()
 	bCanRoll = true;
 }
 
-FVector ATP_TopDownCharacter::GetLaunchVelocity_Implementation() const
+FVector ATP_TopDownCharacter::GetLaunchVelocity() const
 {
-	return GetLaunchVelocity();
+	return GetVelocity() * RollVelocityMultiplier;
 }
