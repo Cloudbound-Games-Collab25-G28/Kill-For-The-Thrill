@@ -87,5 +87,3 @@ gencmn filter=lfs diff=lfs merge=lfs binary
 gendict filter=lfs diff=lfs merge=lfs binary
 genrb filter=lfs diff=lfs merge=lfs binary
 pkgdata filter=lfs diff=lfs merge=lfs binary
-*.uasset !text !filter !merge !diff
-*.umap !text !filter !merge !diff
