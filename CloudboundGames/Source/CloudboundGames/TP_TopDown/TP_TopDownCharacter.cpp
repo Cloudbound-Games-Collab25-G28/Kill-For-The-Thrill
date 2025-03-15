@@ -1,15 +1,17 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "TP_TopDownCharacter.h"
+
+#include "EnhancedInputComponent.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Camera/CameraComponent.h"
-#include "Components/DecalComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Materials/Material.h"
 #include "Engine/World.h"
+#include "Kismet/KismetMathLibrary.h"
 
 ATP_TopDownCharacter::ATP_TopDownCharacter()
 {
@@ -39,13 +41,42 @@ ATP_TopDownCharacter::ATP_TopDownCharacter()
 	TopDownCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("TopDownCamera"));
 	TopDownCameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	TopDownCameraComponent->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
-
-	// Activate ticking in order to update the cursor every frame.
-	PrimaryActorTick.bCanEverTick = true;
-	PrimaryActorTick.bStartWithTickEnabled = true;
 }
 
-void ATP_TopDownCharacter::Tick(float DeltaSeconds)
+void ATP_TopDownCharacter::OnHorizontalMovementTriggered()
 {
-    Super::Tick(DeltaSeconds);
+	FRotator ControlRot = GetControlRotation();
+	ControlRot.Pitch = 0.0f;
+	FVector RightVector = UKismetMathLibrary::GetRightVector(ControlRot);
+	AddMovementInput(RightVector, MoveHorizontalActionBinding->GetValue().Get<float>());
+}
+
+void ATP_TopDownCharacter::OnVerticalMovementTriggered()
+{
+	FRotator ControlRot = GetControlRotation();
+	ControlRot.Pitch = 0.0f;
+	FVector ForwardVector = UKismetMathLibrary::GetForwardVector(ControlRot);
+	AddMovementInput(ForwardVector, MoveVerticalActionBinding->GetValue().Get<float>());
+}
+
+void ATP_TopDownCharacter::OnRollTriggered()
+{
+	if (bCanRoll)
+	{
+		bCanRoll = false;
+		LaunchCharacter(GetLaunchVelocity(), false, false);
+		
+		FTimerHandle RollTimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(RollTimerHandle, this, &ATP_TopDownCharacter::ResetRollCooldown, RollCooldownTime, false);
+	}
+}
+
+void ATP_TopDownCharacter::ResetRollCooldown()
+{
+	bCanRoll = true;
+}
+
+FVector ATP_TopDownCharacter::GetLaunchVelocity_Implementation() const
+{
+	return GetLaunchVelocity();
 }
