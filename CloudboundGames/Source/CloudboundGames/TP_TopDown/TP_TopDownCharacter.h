@@ -22,12 +22,17 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 
 	/** Input handlers for movement. */
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void OnHorizontalMovementTriggered();
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void OnVerticalMovementTriggered();
-	
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void OnRollTriggered();
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void ResetRollCooldown();
-	
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	FVector GetLaunchVelocity() const;
 
 	FEnhancedInputActionValueBinding* MoveHorizontalActionBinding;

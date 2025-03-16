@@ -43,7 +43,7 @@ ATP_TopDownCharacter::ATP_TopDownCharacter()
 	TopDownCameraComponent->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 }
 
-void ATP_TopDownCharacter::OnHorizontalMovementTriggered()
+void ATP_TopDownCharacter::OnHorizontalMovementTriggered_Implementation()
 {
 	FRotator ControlRot = GetControlRotation();
 	ControlRot.Pitch = 0.0f;
@@ -51,7 +51,7 @@ void ATP_TopDownCharacter::OnHorizontalMovementTriggered()
 	AddMovementInput(RightVector, MoveHorizontalActionBinding->GetValue().Get<float>());
 }
 
-void ATP_TopDownCharacter::OnVerticalMovementTriggered()
+void ATP_TopDownCharacter::OnVerticalMovementTriggered_Implementation()
 {
 	FRotator ControlRot = GetControlRotation();
 	ControlRot.Pitch = 0.0f;
@@ -59,7 +59,7 @@ void ATP_TopDownCharacter::OnVerticalMovementTriggered()
 	AddMovementInput(ForwardVector, MoveVerticalActionBinding->GetValue().Get<float>());
 }
 
-void ATP_TopDownCharacter::OnRollTriggered()
+void ATP_TopDownCharacter::OnRollTriggered_Implementation()
 {
 	if (bCanRoll)
 	{
@@ -71,12 +71,12 @@ void ATP_TopDownCharacter::OnRollTriggered()
 	}
 }
 
-void ATP_TopDownCharacter::ResetRollCooldown()
+void ATP_TopDownCharacter::ResetRollCooldown_Implementation()
 {
 	bCanRoll = true;
 }
 
-FVector ATP_TopDownCharacter::GetLaunchVelocity() const
+FVector ATP_TopDownCharacter::GetLaunchVelocity_Implementation() const
 {
 	return GetVelocity() * RollVelocityMultiplier;
 }
