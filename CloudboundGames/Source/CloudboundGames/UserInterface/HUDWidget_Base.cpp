@@ -15,8 +15,8 @@ void UHUDWidget_Base::NativeConstruct()
 
 void UHUDWidget_Base::SetupHealthBar(UHealthComponent* healthComponent)
 {
+	HealthBar->UpdateValue(healthComponent->MaxHealth, healthComponent->MaxHealth);
 	healthComponent->OnHealthChanged.AddDynamic(this, &UHUDWidget_Base::UpdateHealthBar);
-	HealthBar->UpdateValue(healthComponent->Health, healthComponent->MaxHealth);
 }
 
 void UHUDWidget_Base::UpdateHealthBar_Implementation(UHealthComponent* HealthComponent)
