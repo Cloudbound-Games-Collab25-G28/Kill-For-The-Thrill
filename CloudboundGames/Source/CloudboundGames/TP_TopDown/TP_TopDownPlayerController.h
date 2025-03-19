@@ -4,12 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "EnhancedInputComponent.h"
-#include "Templates/SubclassOf.h"
 #include "GameFramework/PlayerController.h"
 #include "TP_TopDownPlayerController.generated.h"
-
-class UHealthComponent;
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayerKilledSignature, AController*, Controller);
 
 /** Forward declaration to improve compiling times */
 class UNiagaraSystem;
@@ -41,9 +37,18 @@ public:
 	UInputAction* RollAction;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void OnPlayerKilled(UHealthComponent* healthComponent);
+	void OnPlayerKilled(class UHealthComponent* healthComponent);
 
 protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=HUD, meta=(AllowPrivateAccess = "true"))
+	TSubclassOf<UUserWidget> HUDWidgetType;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=HUD, meta=(AllowPrivateAccess = "true"))
+	TSubclassOf<UUserWidget> GameOverWidgetType;
+
+	TObjectPtr<UUserWidget> HUDWidget;
+	TObjectPtr<UUserWidget> GameOverWidget;
+	
 	virtual void SetupInputComponent() override;
 	
 	// To add mapping context

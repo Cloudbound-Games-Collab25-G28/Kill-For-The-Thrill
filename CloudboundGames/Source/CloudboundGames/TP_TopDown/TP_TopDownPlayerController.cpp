@@ -5,6 +5,7 @@
 #include "TP_TopDownCharacter.h"
 #include "Engine/World.h"
 #include "EnhancedInputSubsystems.h"
+#include "Blueprint/UserWidget.h"
 #include "CloudboundGames/Stats/HealthComponent.h"
 #include "Engine/LocalPlayer.h"
 
@@ -48,10 +49,14 @@ void ATP_TopDownPlayerController::OnPossess(APawn* InPawn)
 
 	EnhancedInputComponent->BindAction(RollAction, ETriggerEvent::Triggered, TopDownCharacter, &ATP_TopDownCharacter::OnRollTriggered);
 
+	// Setup Health Events
 	if (UHealthComponent* healthComponent = TopDownCharacter->FindComponentByClass<UHealthComponent>())
 	{
 		healthComponent->OnKilled.AddUniqueDynamic(this, &ATP_TopDownPlayerController::OnPlayerKilled);
 	}
+	
+	HUDWidget = CreateWidget<UUserWidget, ATP_TopDownPlayerController*>(this, HUDWidgetType, "HUD");
+	HUDWidget->AddToViewport();
 }
 
 void ATP_TopDownPlayerController::OnPlayerKilled_Implementation(UHealthComponent* healthComponent)
@@ -61,7 +66,9 @@ void ATP_TopDownPlayerController::OnPlayerKilled_Implementation(UHealthComponent
 	// Stop possessing the player.
 	UnPossess();
 
-	// etc
+	GameOverWidget = CreateWidget<UUserWidget, ATP_TopDownPlayerController*>(this, GameOverWidgetType, "GameOver");
+	HUDWidget->RemoveFromParent();
+	GameOverWidget->AddToViewport();
 }
 
 void ATP_TopDownPlayerController::SetupInputComponent()
