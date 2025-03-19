@@ -21,10 +21,3 @@ ATP_TopDownGameMode::ATP_TopDownGameMode()
 		PlayerControllerClass = PlayerControllerBPClass.Class;
 	}
 }
-
-void ATP_TopDownGameMode::OnPlayerDeath_Implementation()
-{
-	// freeze the game
-
-	// show the UI
-}

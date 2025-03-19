@@ -8,6 +8,9 @@
 #include "GameFramework/PlayerController.h"
 #include "TP_TopDownPlayerController.generated.h"
 
+class UHealthComponent;
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayerKilledSignature, AController*, Controller);
+
 /** Forward declaration to improve compiling times */
 class UNiagaraSystem;
 class UInputMappingContext;
@@ -36,6 +39,9 @@ public:
 	/** Roll Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	UInputAction* RollAction;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void OnPlayerKilled(UHealthComponent* healthComponent);
 
 protected:
 	virtual void SetupInputComponent() override;

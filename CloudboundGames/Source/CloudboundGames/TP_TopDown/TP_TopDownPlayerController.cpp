@@ -5,6 +5,7 @@
 #include "TP_TopDownCharacter.h"
 #include "Engine/World.h"
 #include "EnhancedInputSubsystems.h"
+#include "CloudboundGames/Stats/HealthComponent.h"
 #include "Engine/LocalPlayer.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -46,6 +47,21 @@ void ATP_TopDownPlayerController::OnPossess(APawn* InPawn)
 	TopDownCharacter->MoveVerticalActionBinding = &EnhancedInputComponent->BindActionValue(VerticalMovementAction);
 
 	EnhancedInputComponent->BindAction(RollAction, ETriggerEvent::Triggered, TopDownCharacter, &ATP_TopDownCharacter::OnRollTriggered);
+
+	if (UHealthComponent* healthComponent = TopDownCharacter->FindComponentByClass<UHealthComponent>())
+	{
+		healthComponent->OnKilled.AddUniqueDynamic(this, &ATP_TopDownPlayerController::OnPlayerKilled);
+	}
+}
+
+void ATP_TopDownPlayerController::OnPlayerKilled_Implementation(UHealthComponent* healthComponent)
+{
+	healthComponent->OnKilled.RemoveDynamic(this, &ATP_TopDownPlayerController::OnPlayerKilled);
+	
+	// Stop possessing the player.
+	UnPossess();
+
+	// etc
 }
 
 void ATP_TopDownPlayerController::SetupInputComponent()
