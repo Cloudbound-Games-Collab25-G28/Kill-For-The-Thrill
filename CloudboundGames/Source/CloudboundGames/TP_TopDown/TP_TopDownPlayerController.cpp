@@ -8,6 +8,7 @@
 #include "Blueprint/UserWidget.h"
 #include "CloudboundGames/Stats/HealthComponent.h"
 #include "Engine/LocalPlayer.h"
+#include "CloudboundGames/UserInterface/HUDWidget_Base.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -49,13 +50,15 @@ void ATP_TopDownPlayerController::OnPossess(APawn* InPawn)
 
 	EnhancedInputComponent->BindAction(RollAction, ETriggerEvent::Triggered, TopDownCharacter, &ATP_TopDownCharacter::OnRollTriggered);
 
+	HUDWidget = CreateWidget<UHUDWidget_Base, ATP_TopDownPlayerController*>(this, HUDWidgetType, "HUD");
+	
 	// Setup Health Events
 	if (UHealthComponent* healthComponent = TopDownCharacter->FindComponentByClass<UHealthComponent>())
 	{
 		healthComponent->OnKilled.AddUniqueDynamic(this, &ATP_TopDownPlayerController::OnPlayerKilled);
+		HUDWidget->SetupHealthBar(healthComponent);
 	}
 	
-	HUDWidget = CreateWidget<UUserWidget, ATP_TopDownPlayerController*>(this, HUDWidgetType, "HUD");
 	HUDWidget->AddToViewport();
 }
 

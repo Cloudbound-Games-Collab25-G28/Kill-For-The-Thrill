@@ -7,6 +7,7 @@
 #include "GameFramework/PlayerController.h"
 #include "TP_TopDownPlayerController.generated.h"
 
+class UHUDWidget_Base;
 /** Forward declaration to improve compiling times */
 class UNiagaraSystem;
 class UInputMappingContext;
@@ -41,12 +42,12 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=HUD, meta=(AllowPrivateAccess = "true"))
-	TSubclassOf<UUserWidget> HUDWidgetType;
+	TSubclassOf<UHUDWidget_Base> HUDWidgetType;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=HUD, meta=(AllowPrivateAccess = "true"))
 	TSubclassOf<UUserWidget> GameOverWidgetType;
 
-	TObjectPtr<UUserWidget> HUDWidget;
+	TObjectPtr<UHUDWidget_Base> HUDWidget;
 	TObjectPtr<UUserWidget> GameOverWidget;
 	
 	virtual void SetupInputComponent() override;

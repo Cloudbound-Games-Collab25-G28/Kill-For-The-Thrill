@@ -6,7 +6,8 @@
 #include "Components/ActorComponent.h"
 #include "HealthComponent.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDeath, class UHealthComponent*, Actor);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnKilled, class UHealthComponent*, HealthComponent);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChanged, UHealthComponent*, HealthComponent);
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent, IsBlueprintBase=true))
 class CLOUDBOUNDGAMES_API UHealthComponent : public UActorComponent
@@ -18,8 +19,17 @@ public:
 	UHealthComponent();
 
 	UPROPERTY(BlueprintCallable)
-	FOnDeath OnKilled;
-	
+	FOnKilled OnKilled;
+
+	UPROPERTY(BlueprintCallable)
+	FOnHealthChanged OnHealthChanged;
+
+	UPROPERTY(BlueprintReadWrite)
+	float Health = 0.0f;
+
+	UPROPERTY(BlueprintReadWrite)
+	float MaxHealth = 100.0f;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
