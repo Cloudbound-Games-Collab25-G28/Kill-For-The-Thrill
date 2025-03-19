@@ -13,6 +13,9 @@ class ATP_TopDownGameMode : public AGameModeBase
 
 public:
 	ATP_TopDownGameMode();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void OnPlayerDeath();
 };
 
 
