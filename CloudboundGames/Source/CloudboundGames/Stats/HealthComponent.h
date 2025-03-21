@@ -18,7 +18,7 @@ public:
 	// Sets default values for this component's properties
 	UHealthComponent();
 
-	UPROPERTY(BlueprintCallable)
+	UPROPERTY(BlueprintCallable, BlueprintAssignable)
 	FOnKilled OnKilled;
 
 	UPROPERTY(BlueprintCallable)
