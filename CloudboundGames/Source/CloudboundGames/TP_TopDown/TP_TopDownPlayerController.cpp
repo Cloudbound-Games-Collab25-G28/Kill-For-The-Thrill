@@ -5,7 +5,10 @@
 #include "TP_TopDownCharacter.h"
 #include "Engine/World.h"
 #include "EnhancedInputSubsystems.h"
+#include "Blueprint/UserWidget.h"
+#include "CloudboundGames/Stats/HealthComponent.h"
 #include "Engine/LocalPlayer.h"
+#include "CloudboundGames/UserInterface/HUDWidget_Base.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -46,6 +49,29 @@ void ATP_TopDownPlayerController::OnPossess(APawn* InPawn)
 	TopDownCharacter->MoveVerticalActionBinding = &EnhancedInputComponent->BindActionValue(VerticalMovementAction);
 
 	EnhancedInputComponent->BindAction(RollAction, ETriggerEvent::Triggered, TopDownCharacter, &ATP_TopDownCharacter::OnRollTriggered);
+
+	HUDWidget = CreateWidget<UHUDWidget_Base, ATP_TopDownPlayerController*>(this, HUDWidgetType, "HUD");
+	
+	// Setup Health Events
+	if (UHealthComponent* healthComponent = TopDownCharacter->FindComponentByClass<UHealthComponent>())
+	{
+		healthComponent->OnKilled.AddUniqueDynamic(this, &ATP_TopDownPlayerController::OnPlayerKilled);
+		HUDWidget->SetupHealthBar(healthComponent);
+	}
+	
+	HUDWidget->AddToViewport();
+}
+
+void ATP_TopDownPlayerController::OnPlayerKilled_Implementation(UHealthComponent* healthComponent)
+{
+	healthComponent->OnKilled.RemoveDynamic(this, &ATP_TopDownPlayerController::OnPlayerKilled);
+	
+	// Stop possessing the player.
+	UnPossess();
+
+	GameOverWidget = CreateWidget<UUserWidget, ATP_TopDownPlayerController*>(this, GameOverWidgetType, "GameOver");
+	HUDWidget->RemoveFromParent();
+	GameOverWidget->AddToViewport();
 }
 
 void ATP_TopDownPlayerController::SetupInputComponent()

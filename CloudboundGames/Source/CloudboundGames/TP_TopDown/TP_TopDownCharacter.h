@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "TP_TopDownCharacter.generated.h"
 
+class UHealthComponent;
 struct FEnhancedInputActionValueBinding;
 
 UCLASS(Blueprintable)

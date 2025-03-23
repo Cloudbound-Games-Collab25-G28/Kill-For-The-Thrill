@@ -6,6 +6,8 @@
 #include "GameFramework/GameModeBase.h"
 #include "TP_TopDownGameMode.generated.h"
 
+class AWaveManager_Base;
+
 UCLASS(minimalapi)
 class ATP_TopDownGameMode : public AGameModeBase
 {
@@ -13,7 +15,17 @@ class ATP_TopDownGameMode : public AGameModeBase
 
 public:
 	ATP_TopDownGameMode();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void Handle_GameWon();
+	
+	virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=UI, meta=(AllowPrivateAccess = "true"))
+	TSubclassOf<UUserWidget> WinWidgetType;
+
+private:
+	TObjectPtr<AWaveManager_Base> WaveManager;
+
+	TObjectPtr<UUserWidget> WinWidget;
 };
-
-
-
