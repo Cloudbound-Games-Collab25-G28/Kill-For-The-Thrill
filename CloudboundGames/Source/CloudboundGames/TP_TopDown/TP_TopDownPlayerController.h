@@ -3,10 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Templates/SubclassOf.h"
+#include "EnhancedInputComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "TP_TopDownPlayerController.generated.h"
 
+class UHUDWidget_Base;
 /** Forward declaration to improve compiling times */
 class UNiagaraSystem;
 class UInputMappingContext;
@@ -22,47 +23,42 @@ class ATP_TopDownPlayerController : public APlayerController
 public:
 	ATP_TopDownPlayerController();
 
-	/** Time Threshold to know if it was a short press */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
-	float ShortPressThreshold;
-
-	/** FX Class that we will spawn when clicking */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
-	UNiagaraSystem* FXCursor;
-
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	UInputMappingContext* DefaultMappingContext;
 	
-	/** Jump Input Action */
+	/** Horizontal Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
-	UInputAction* SetDestinationClickAction;
+	UInputAction* HorizontalMovementAction;
+	/** Vertical Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
+	UInputAction* VerticalMovementAction;
+	/** Roll Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
+	UInputAction* RollAction;
 
-	/** Jump Input Action */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
-	UInputAction* SetDestinationTouchAction;
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void OnPlayerKilled(class UHealthComponent* healthComponent);
 
 protected:
-	/** True if the controlled character should navigate to the mouse cursor. */
-	uint32 bMoveToMouseCursor : 1;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=HUD, meta=(AllowPrivateAccess = "true"))
+	TSubclassOf<UHUDWidget_Base> HUDWidgetType;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=HUD, meta=(AllowPrivateAccess = "true"))
+	TSubclassOf<UUserWidget> GameOverWidgetType;
 
+	TObjectPtr<UHUDWidget_Base> HUDWidget;
+	TObjectPtr<UUserWidget> GameOverWidget;
+	
 	virtual void SetupInputComponent() override;
 	
 	// To add mapping context
 	virtual void BeginPlay();
 
-	/** Input handlers for SetDestination action. */
-	void OnInputStarted();
-	void OnSetDestinationTriggered();
-	void OnSetDestinationReleased();
-	void OnTouchTriggered();
-	void OnTouchReleased();
+	virtual void OnPossess(APawn* InPawn);
 
 private:
-	FVector CachedDestination;
-
-	bool bIsTouch; // Is it a touch device
-	float FollowTime; // For how long it has been pressed
+	
 };
 
 
