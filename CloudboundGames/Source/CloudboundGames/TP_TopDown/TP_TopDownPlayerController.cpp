@@ -2,10 +2,13 @@
 
 #include "TP_TopDownPlayerController.h"
 #include "GameFramework/Pawn.h"
-#include "TP_TopDownCharacter.h"
+#include "../Characters/PlayerCharacter.h"
 #include "Engine/World.h"
 #include "EnhancedInputSubsystems.h"
+#include "Blueprint/UserWidget.h"
+#include "CloudboundGames/Stats/HealthComponent.h"
 #include "Engine/LocalPlayer.h"
+#include "CloudboundGames/UserInterface/HUDWidget_Base.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -30,9 +33,8 @@ void ATP_TopDownPlayerController::OnPossess(APawn* InPawn)
 		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input Component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 		return;
 	}
-
-	ACharacter* testPawn = GetCharacter();
-	ATP_TopDownCharacter* TopDownCharacter = Cast<ATP_TopDownCharacter, ACharacter>(testPawn);
+	
+	APlayerCharacter* TopDownCharacter = Cast<APlayerCharacter, ACharacter>(GetCharacter());
 	if (!TopDownCharacter)
 	{
 		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find a Character!"), *GetNameSafe(this));
@@ -40,12 +42,38 @@ void ATP_TopDownPlayerController::OnPossess(APawn* InPawn)
 	}
 		
 	// Setup movement events.
-	EnhancedInputComponent->BindAction(HorizontalMovementAction, ETriggerEvent::Triggered, TopDownCharacter, &ATP_TopDownCharacter::OnHorizontalMovementTriggered);
+	EnhancedInputComponent->BindAction(HorizontalMovementAction, ETriggerEvent::Triggered, TopDownCharacter, &APlayerCharacter::OnHorizontalMovementTriggered);
 	TopDownCharacter->MoveHorizontalActionBinding = &EnhancedInputComponent->BindActionValue(HorizontalMovementAction);
-	EnhancedInputComponent->BindAction(VerticalMovementAction, ETriggerEvent::Triggered, TopDownCharacter, &ATP_TopDownCharacter::OnVerticalMovementTriggered);
+	EnhancedInputComponent->BindAction(VerticalMovementAction, ETriggerEvent::Triggered, TopDownCharacter, &APlayerCharacter::OnVerticalMovementTriggered);
 	TopDownCharacter->MoveVerticalActionBinding = &EnhancedInputComponent->BindActionValue(VerticalMovementAction);
 
-	EnhancedInputComponent->BindAction(RollAction, ETriggerEvent::Triggered, TopDownCharacter, &ATP_TopDownCharacter::OnRollTriggered);
+	EnhancedInputComponent->BindAction(RollAction, ETriggerEvent::Triggered, TopDownCharacter, &APlayerCharacter::OnRollTriggered);
+
+	if (HUDWidgetType)
+	{
+		HUDWidget = CreateWidget<UHUDWidget_Base, ATP_TopDownPlayerController*>(this, HUDWidgetType, "HUD");
+	
+		// Setup Health Events
+		if (UHealthComponent* healthComponent = TopDownCharacter->FindComponentByClass<UHealthComponent>())
+		{
+			healthComponent->OnKilled.AddUniqueDynamic(this, &ATP_TopDownPlayerController::OnPlayerKilled);
+			HUDWidget->SetupHealthBar(healthComponent);
+		}
+	
+		HUDWidget->AddToViewport();
+	}
+}
+
+void ATP_TopDownPlayerController::OnPlayerKilled_Implementation(UHealthComponent* healthComponent)
+{
+	healthComponent->OnKilled.RemoveDynamic(this, &ATP_TopDownPlayerController::OnPlayerKilled);
+	
+	// Stop possessing the player.
+	UnPossess();
+
+	GameOverWidget = CreateWidget<UUserWidget, ATP_TopDownPlayerController*>(this, GameOverWidgetType, "GameOver");
+	HUDWidget->RemoveFromParent();
+	GameOverWidget->AddToViewport();
 }
 
 void ATP_TopDownPlayerController::SetupInputComponent()
