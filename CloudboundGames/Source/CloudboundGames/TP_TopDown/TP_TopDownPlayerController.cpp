@@ -50,16 +50,19 @@ void ATP_TopDownPlayerController::OnPossess(APawn* InPawn)
 
 	EnhancedInputComponent->BindAction(RollAction, ETriggerEvent::Triggered, TopDownCharacter, &APlayerCharacter::OnRollTriggered);
 
-	HUDWidget = CreateWidget<UHUDWidget_Base, ATP_TopDownPlayerController*>(this, HUDWidgetType, "HUD");
-	
-	// Setup Health Events
-	if (UHealthComponent* healthComponent = TopDownCharacter->FindComponentByClass<UHealthComponent>())
+	if (HUDWidgetType)
 	{
-		healthComponent->OnKilled.AddUniqueDynamic(this, &ATP_TopDownPlayerController::OnPlayerKilled);
-		HUDWidget->SetupHealthBar(healthComponent);
-	}
+		HUDWidget = CreateWidget<UHUDWidget_Base, ATP_TopDownPlayerController*>(this, HUDWidgetType, "HUD");
 	
-	HUDWidget->AddToViewport();
+		// Setup Health Events
+		if (UHealthComponent* healthComponent = TopDownCharacter->FindComponentByClass<UHealthComponent>())
+		{
+			healthComponent->OnKilled.AddUniqueDynamic(this, &ATP_TopDownPlayerController::OnPlayerKilled);
+			HUDWidget->SetupHealthBar(healthComponent);
+		}
+	
+		HUDWidget->AddToViewport();
+	}
 }
 
 void ATP_TopDownPlayerController::OnPlayerKilled_Implementation(UHealthComponent* healthComponent)
