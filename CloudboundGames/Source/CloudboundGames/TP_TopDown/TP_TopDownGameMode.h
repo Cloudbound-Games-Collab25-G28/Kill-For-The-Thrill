@@ -6,7 +6,11 @@
 #include "GameFramework/GameModeBase.h"
 #include "TP_TopDownGameMode.generated.h"
 
-class AWaveManager_Base;
+enum class EWeaponType : uint8;
+class UWeaponSelect_Base;
+class ATP_TopDownPlayerController;
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnStartWave, int, WaveNumber, int, EnemiesKilled, int, TotalEnemies, int,
+                                              MaterialsCollected);
 
 UCLASS(minimalapi)
 class ATP_TopDownGameMode : public AGameModeBase
@@ -17,15 +21,48 @@ public:
 	ATP_TopDownGameMode();
 
 	UFUNCTION(BlueprintNativeEvent)
-	void Handle_GameWon();
-	
-	virtual void BeginPlay() override;
+	void SetupHUD();
 
+	UFUNCTION(BlueprintNativeEvent)
+	void ChooseWeapon();
+	UFUNCTION(BlueprintNativeEvent)
+	void ApplyWeapon(EWeaponType Class);
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void StartupGame();
+	
+	UFUNCTION(BlueprintNativeEvent)
+	void Handle_GameWon();
+
+	UPROPERTY(BlueprintCallable, BlueprintAssignable)
+	FOnStartWave OnWaveStart;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void OnPlayerKilled(class UHealthComponent* healthComponent);
+
+	UPROPERTY(BlueprintReadOnly)
+	TObjectPtr<ATP_TopDownPlayerController> PlayerController;
+
+protected:
+	virtual void PostLogin(APlayerController* NewPlayer) override;
+
+private:
+	TObjectPtr<UWeaponSelect_Base> WeaponSelectWidget;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=UI, meta=(AllowPrivateAccess = "true"))
+	TSubclassOf<UWeaponSelect_Base> WeaponSelectWidgetType;
+	
+	TObjectPtr<UUserWidget> WinWidget;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=UI, meta=(AllowPrivateAccess = "true"))
 	TSubclassOf<UUserWidget> WinWidgetType;
 
-private:
-	TObjectPtr<AWaveManager_Base> WaveManager;
+	TObjectPtr<class UHUDWidget_Base> HUDWidget;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=UI, meta=(AllowPrivateAccess = "true"))
+	TSubclassOf<UHUDWidget_Base> HUDWidgetType;
 
-	TObjectPtr<UUserWidget> WinWidget;
+	TObjectPtr<UUserWidget> GameOverWidget;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=UI, meta=(AllowPrivateAccess = "true"))
+	TSubclassOf<UUserWidget> GameOverWidgetType;
+	
+	UPROPERTY(BlueprintReadWrite, Category=Waves, meta=(AllowPrivateAccess = "true"))
+	int WaveNumber = 0;
 };

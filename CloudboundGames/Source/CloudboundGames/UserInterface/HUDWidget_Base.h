@@ -6,9 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "HUDWidget_Base.generated.h"
 
-class UTextProgressBar;
 class UHealthComponent;
-class UProgressBar;
 /**
  * 
  */
@@ -24,7 +22,15 @@ public:
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void UpdateHealthBar(UHealthComponent* HealthComponent);
+
+	void SetupWaveIndicator(class ATP_TopDownGameMode* WaveManager);
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void UpdateWaveIndicator(int WaveNumber, int EnemiesKilled, int TotalEnemies, int MaterialsCollected);
 	
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextProgressBar> HealthBar;
+	TObjectPtr<class UTextProgressBar> HealthBar;
+
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<class UWaveIndicator> WaveIndicator;
 };
