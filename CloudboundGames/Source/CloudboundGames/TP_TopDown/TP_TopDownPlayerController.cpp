@@ -5,10 +5,12 @@
 #include "../Characters/PlayerCharacter.h"
 #include "Engine/World.h"
 #include "EnhancedInputSubsystems.h"
+#include "TP_TopDownGameMode.h"
 #include "Blueprint/UserWidget.h"
 #include "CloudboundGames/Stats/HealthComponent.h"
 #include "Engine/LocalPlayer.h"
 #include "CloudboundGames/UserInterface/HUDWidget_Base.h"
+#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -58,6 +60,11 @@ void ATP_TopDownPlayerController::OnPossess(APawn* InPawn)
 		{
 			healthComponent->OnKilled.AddUniqueDynamic(this, &ATP_TopDownPlayerController::OnPlayerKilled);
 			HUDWidget->SetupHealthBar(healthComponent);
+		}
+		
+		if (ATP_TopDownGameMode* GameMode = Cast<ATP_TopDownGameMode>(UGameplayStatics::GetGameMode(GetWorld())))
+		{
+			HUDWidget->SetupWaveIndicator(GameMode);
 		}
 	
 		HUDWidget->AddToViewport();

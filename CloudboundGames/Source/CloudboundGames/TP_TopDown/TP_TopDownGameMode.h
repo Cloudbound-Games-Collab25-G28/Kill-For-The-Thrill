@@ -6,7 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "TP_TopDownGameMode.generated.h"
 
-class AWaveManager_Base;
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnStartWave, int, WaveNumber, int, EnemiesKilled, int, TotalEnemies, int, MaterialsCollected);
 
 UCLASS(minimalapi)
 class ATP_TopDownGameMode : public AGameModeBase
@@ -15,17 +15,20 @@ class ATP_TopDownGameMode : public AGameModeBase
 
 public:
 	ATP_TopDownGameMode();
-
+	
 	UFUNCTION(BlueprintNativeEvent)
 	void Handle_GameWon();
-	
-	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=UI, meta=(AllowPrivateAccess = "true"))
-	TSubclassOf<UUserWidget> WinWidgetType;
+	UPROPERTY(BlueprintCallable, BlueprintAssignable)
+	FOnStartWave OnWaveStart;
 
 private:
-	TObjectPtr<AWaveManager_Base> WaveManager;
-
+	
 	TObjectPtr<UUserWidget> WinWidget;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=UI, meta=(AllowPrivateAccess = "true"))
+	TSubclassOf<UUserWidget> WinWidgetType;
+	
+	UPROPERTY(BlueprintReadWrite, Category=Waves, meta=(AllowPrivateAccess = "true"))
+	int WaveNumber = 0;
 };

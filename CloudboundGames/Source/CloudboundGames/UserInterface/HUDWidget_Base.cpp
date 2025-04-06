@@ -4,8 +4,11 @@
 #include "HUDWidget_Base.h"
 
 #include "TextProgressBar.h"
+#include "WaveIndicator.h"
 #include "CloudboundGames/Stats/HealthComponent.h"
-#include "Components/ProgressBar.h"
+#include "CloudboundGames/TP_TopDown/TP_TopDownGameMode.h"
+
+class ATP_TopDownGameMode;
 
 void UHUDWidget_Base::NativeConstruct()
 {
@@ -22,4 +25,15 @@ void UHUDWidget_Base::SetupHealthBar(UHealthComponent* healthComponent)
 void UHUDWidget_Base::UpdateHealthBar_Implementation(UHealthComponent* HealthComponent)
 {
 	HealthBar->UpdateValue(HealthComponent->Health, HealthComponent->MaxHealth);
+}
+
+void UHUDWidget_Base::SetupWaveIndicator(ATP_TopDownGameMode* WaveManager)
+{
+	WaveIndicator->UpdateValue(1);
+	WaveManager->OnWaveStart.AddDynamic(this, &UHUDWidget_Base::UpdateWaveIndicator);
+}
+
+void UHUDWidget_Base::UpdateWaveIndicator_Implementation(int WaveNumber, int EnemiesKilled, int TotalEnemies, int MaterialsCollected)
+{
+	WaveIndicator->UpdateValue(WaveNumber);
 }
