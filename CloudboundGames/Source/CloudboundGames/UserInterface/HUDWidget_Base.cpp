@@ -8,8 +8,6 @@
 #include "CloudboundGames/Stats/HealthComponent.h"
 #include "CloudboundGames/TP_TopDown/TP_TopDownGameMode.h"
 
-class ATP_TopDownGameMode;
-
 void UHUDWidget_Base::NativeConstruct()
 {
 	Super::NativeConstruct();
