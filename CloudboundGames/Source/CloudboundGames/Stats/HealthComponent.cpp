@@ -10,6 +10,10 @@ UHealthComponent::UHealthComponent()
 	
 }
 
+void UHealthComponent::SetHealth_Implementation(float NewHealth)
+{
+}
+
 // Called when the game starts
 void UHealthComponent::BeginPlay()
 {
