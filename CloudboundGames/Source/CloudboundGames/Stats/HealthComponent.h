@@ -21,7 +21,7 @@ public:
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
 	FOnKilled OnKilled;
 
-	UPROPERTY(BlueprintCallable)
+	UPROPERTY(BlueprintCallable, BlueprintAssignable)
 	FOnHealthChanged OnHealthChanged;
 
 	UPROPERTY(BlueprintReadWrite)
@@ -29,6 +29,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	float MaxHealth = 100.0f;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void SetHealth(float NewHealth);
 
 protected:
 	// Called when the game starts
