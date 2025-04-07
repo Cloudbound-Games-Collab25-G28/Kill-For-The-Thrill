@@ -38,7 +38,7 @@ public:
 	FOnStartWave OnWaveStart;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void OnPlayerKilled(class UHealthComponent* healthComponent);
+	void OnPlayerKilled(class ULivesComponent* livesComponent);
 
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<ATP_TopDownPlayerController> PlayerController;

@@ -5,11 +5,13 @@
 #include "TP_TopDownPlayerController.h"
 #include "Blueprint/UserWidget.h"
 #include "Blueprint/WidgetLayoutLibrary.h"
+#include "CloudboundGames/Characters/PlayerCharacter.h"
 #include "CloudboundGames/Stats/HealthComponent.h"
+#include "CloudboundGames/Stats/LivesComponent.h"
 #include "UObject/ConstructorHelpers.h"
 
-#include "CloudboundGames/UserInterface/HUDWidget_Base.h"
-#include "CloudboundGames/UserInterface/WeaponSelect_Base.h"
+#include "CloudboundGames/UserInterface/Widgets/HUDWidget_Base.h"
+#include "CloudboundGames/UserInterface/Widgets/WeaponSelect_Base.h"
 
 ATP_TopDownGameMode::ATP_TopDownGameMode()
 {
@@ -35,10 +37,15 @@ void ATP_TopDownGameMode::SetupHUD_Implementation()
 	HUDWidget = CreateWidget<UHUDWidget_Base, APlayerController*>(PlayerController, HUDWidgetType, "HUD");
 
 	// Setup Health Events
-	if (UHealthComponent* healthComponent = PlayerController->GetPawn()->FindComponentByClass<UHealthComponent>())
+	UHealthComponent* healthComponent = PlayerController->GetPawn()->FindComponentByClass<UHealthComponent>();
+	ULivesComponent* lifeComponent = PlayerController->PlayerPawn->FindComponentByClass<ULivesComponent>();
+	if (healthComponent && lifeComponent)
 	{
-		healthComponent->OnKilled.AddUniqueDynamic(this, &ATP_TopDownGameMode::OnPlayerKilled);
+		lifeComponent->SetupComponent(healthComponent);
+		lifeComponent->OnAllLivesLost.AddUniqueDynamic(this, &ATP_TopDownGameMode::OnPlayerKilled);
+		
 		HUDWidget->SetupHealthBar(healthComponent);
+		HUDWidget->SetupLivesIndicator(lifeComponent);
 	}
 
 	HUDWidget->SetupWaveIndicator(this);
@@ -68,11 +75,11 @@ void ATP_TopDownGameMode::StartupGame_Implementation()
 {
 }
 
-void ATP_TopDownGameMode::OnPlayerKilled_Implementation(class UHealthComponent* healthComponent)
+void ATP_TopDownGameMode::OnPlayerKilled_Implementation(class ULivesComponent* livesComponent)
 {
-	healthComponent->OnKilled.RemoveDynamic(this, &ATP_TopDownGameMode::OnPlayerKilled);
-
-	DisableInput(PlayerController);
+	livesComponent->OnAllLivesLost.RemoveDynamic(this, &ATP_TopDownGameMode::OnPlayerKilled);
+	
+	PlayerController->UnPossess();
 	GameOverWidget = CreateWidget<UUserWidget, APlayerController*>(PlayerController, GameOverWidgetType, "GameOver");
 	HUDWidget->RemoveFromParent();
 	GameOverWidget->AddToViewport();
