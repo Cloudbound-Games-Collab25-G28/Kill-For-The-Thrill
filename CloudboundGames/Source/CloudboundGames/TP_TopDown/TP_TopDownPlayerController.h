@@ -7,7 +7,7 @@
 #include "GameFramework/PlayerController.h"
 #include "TP_TopDownPlayerController.generated.h"
 
-class UHUDWidget_Base;
+class APlayerCharacter;
 /** Forward declaration to improve compiling times */
 class UNiagaraSystem;
 class UInputMappingContext;
@@ -37,19 +37,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	UInputAction* RollAction;
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void OnPlayerKilled(class UHealthComponent* healthComponent);
+	UPROPERTY(BlueprintReadOnly)
+	TObjectPtr<APlayerCharacter> PlayerPawn;
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=HUD, meta=(AllowPrivateAccess = "true"))
-	TSubclassOf<UHUDWidget_Base> HUDWidgetType;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=HUD, meta=(AllowPrivateAccess = "true"))
-	TSubclassOf<UUserWidget> GameOverWidgetType;
-
-	TObjectPtr<UHUDWidget_Base> HUDWidget;
-	TObjectPtr<UUserWidget> GameOverWidget;
-	
 	virtual void SetupInputComponent() override;
 	
 	// To add mapping context
