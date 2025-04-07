@@ -88,6 +88,7 @@ void ATP_TopDownGameMode::OnPlayerKilled_Implementation(class ULivesComponent* l
 void ATP_TopDownGameMode::Handle_GameWon_Implementation()
 {
 	// show win screen
+	PlayerController->UnPossess();
 	WinWidget = CreateWidget<UUserWidget, APlayerController*>(PlayerController, WinWidgetType, "WinGame");
 	UWidgetLayoutLibrary::RemoveAllWidgets(GetWorld());
 	WinWidget->AddToViewport();
