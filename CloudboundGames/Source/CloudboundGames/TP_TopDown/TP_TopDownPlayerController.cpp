@@ -45,7 +45,7 @@ void ATP_TopDownPlayerController::OnPossess(APawn* InPawn)
 	EnhancedInputComponent->BindAction(VerticalMovementAction, ETriggerEvent::Triggered, TopDownCharacter, &APlayerCharacter::OnVerticalMovementTriggered);
 	TopDownCharacter->MoveVerticalActionBinding = &EnhancedInputComponent->BindActionValue(VerticalMovementAction);
 
-	EnhancedInputComponent->BindAction(RollAction, ETriggerEvent::Triggered, TopDownCharacter, &APlayerCharacter::OnRollTriggered);
+	EnhancedInputComponent->BindAction(RollAction, ETriggerEvent::Started, TopDownCharacter, &APlayerCharacter::OnRollTriggered);
 }
 
 void ATP_TopDownPlayerController::SetupInputComponent()
