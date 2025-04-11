@@ -31,6 +31,8 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void OnRollTriggered();
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void RollPlayer();
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void ResetRollCooldown();
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
@@ -54,6 +56,6 @@ private:
 	UPROPERTY(Editanywhere, BlueprintReadWrite, Category=Roll, meta=(AllowPrivateAccess = "true"))
 	float RollCooldownTime = 2.0f;
 	UPROPERTY(Editanywhere, BlueprintReadWrite, Category=Roll, meta=(AllowPrivateAccess = "true"))
-	float RollVelocityMultiplier = 3.0;
+	float RollSpeed;
 };
 

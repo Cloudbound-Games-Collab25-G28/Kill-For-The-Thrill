@@ -47,11 +47,16 @@ void APlayerCharacter::OnRollTriggered_Implementation()
 	if (bCanRoll)
 	{
 		bCanRoll = false;
-		LaunchCharacter(GetLaunchVelocity(), false, false);
+		RollPlayer();
 		
 		FTimerHandle RollTimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(RollTimerHandle, this, &APlayerCharacter::ResetRollCooldown, RollCooldownTime, false);
 	}
+}
+
+void APlayerCharacter::RollPlayer_Implementation()
+{
+	AddActorWorldOffset(GetLaunchVelocity());
 }
 
 void APlayerCharacter::ResetRollCooldown_Implementation()
@@ -61,5 +66,12 @@ void APlayerCharacter::ResetRollCooldown_Implementation()
 
 FVector APlayerCharacter::GetLaunchVelocity_Implementation() const
 {
-	return GetVelocity() * RollVelocityMultiplier;
+	FVector Velocity = GetVelocity();
+	if (Velocity.SizeSquared() > 0.f)
+	{
+		Velocity.Normalize();
+		return Velocity * RollSpeed;
+	}
+	
+	return RollSpeed * GetActorForwardVector();
 }
