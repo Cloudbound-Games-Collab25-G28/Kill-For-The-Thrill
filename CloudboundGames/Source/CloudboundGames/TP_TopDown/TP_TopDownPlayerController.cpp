@@ -5,6 +5,7 @@
 #include "../Characters/PlayerCharacter.h"
 #include "Engine/World.h"
 #include "EnhancedInputSubsystems.h"
+#include "CloudboundGames/Movement/DodgeRollComponent.h"
 #include "Engine/LocalPlayer.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -45,7 +46,7 @@ void ATP_TopDownPlayerController::OnPossess(APawn* InPawn)
 	EnhancedInputComponent->BindAction(VerticalMovementAction, ETriggerEvent::Triggered, TopDownCharacter, &APlayerCharacter::OnVerticalMovementTriggered);
 	TopDownCharacter->MoveVerticalActionBinding = &EnhancedInputComponent->BindActionValue(VerticalMovementAction);
 
-	EnhancedInputComponent->BindAction(RollAction, ETriggerEvent::Started, TopDownCharacter, &APlayerCharacter::OnRollTriggered);
+	EnhancedInputComponent->BindAction(RollAction, ETriggerEvent::Started, TopDownCharacter->DodgeRollComponent, &UDodgeRollComponent::OnRollTriggered);
 }
 
 void ATP_TopDownPlayerController::SetupInputComponent()
