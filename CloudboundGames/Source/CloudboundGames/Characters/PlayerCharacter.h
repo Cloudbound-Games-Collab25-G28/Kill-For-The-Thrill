@@ -6,7 +6,6 @@
 #include "CloudboundGames/Characters/CharacterBase.h"
 #include "PlayerCharacter.generated.h"
 
-class UHealthComponent;
 struct FEnhancedInputActionValueBinding;
 
 UCLASS(Blueprintable, Abstract)
@@ -16,6 +15,8 @@ class APlayerCharacter : public ACharacterBase
 
 public:
 	APlayerCharacter();
+
+	virtual void PostInitializeComponents() override;
 
 	/** Returns TopDownCameraComponent subobject **/
 	FORCEINLINE class UCameraComponent* GetTopDownCameraComponent() const { return TopDownCameraComponent; }
@@ -28,16 +29,12 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void OnVerticalMovementTriggered();
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void OnRollTriggered();
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void ResetRollCooldown();
-
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	FVector GetLaunchVelocity() const;
-
 	FEnhancedInputActionValueBinding* MoveHorizontalActionBinding;
 	FEnhancedInputActionValueBinding* MoveVerticalActionBinding;
+
+	/** Roll component */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components, meta = (AllowPrivateAccess = "true"))
+	class UDodgeRollComponent* DodgeRollComponent;
 
 private:
 	/** Top down camera */
@@ -47,13 +44,5 @@ private:
 	/** Camera boom positioning the camera above the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;
-
-	/** Roll properties */
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category=Roll, meta=(AllowPrivateAccess = "true"))
-	bool bCanRoll = true;
-	UPROPERTY(Editanywhere, BlueprintReadWrite, Category=Roll, meta=(AllowPrivateAccess = "true"))
-	float RollCooldownTime = 2.0f;
-	UPROPERTY(Editanywhere, BlueprintReadWrite, Category=Roll, meta=(AllowPrivateAccess = "true"))
-	float RollVelocityMultiplier = 3.0;
 };
 
