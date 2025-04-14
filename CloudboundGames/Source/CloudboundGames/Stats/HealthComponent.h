@@ -33,7 +33,13 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void SetHealth(float NewHealth);
 
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void SetInvincibility(bool newValue);
+
 protected:
+	UPROPERTY(BlueprintReadOnly, Category=Health, meta=(AllowPrivateAccess=true))
+	bool isInvincible = false;
+	
 	// Called when the game starts
 	virtual void BeginPlay() override;
 };

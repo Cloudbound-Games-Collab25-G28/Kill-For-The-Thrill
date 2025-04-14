@@ -3,6 +3,7 @@
 
 #include "DodgeRollComponent.h"
 
+#include "CloudboundGames/Stats/HealthComponent.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
@@ -35,7 +36,16 @@ void UDodgeRollComponent::RollPlayer_Implementation()
 		Character->GetCharacterMovement()->Activate();
 	}
 	
+	HealthComp->SetInvincibility(true);
 	Character->LaunchCharacter(GetLaunchVelocity(), false, false);
+	
+	FTimerHandle RollBoostTimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(RollBoostTimerHandle, this, &UDodgeRollComponent::OnDashFinished, InvincibilityDuration, false);
+}
+
+void UDodgeRollComponent::OnDashFinished_Implementation()
+{
+	HealthComp->SetInvincibility(false);
 }
 
 void UDodgeRollComponent::ResetRollCooldown_Implementation()

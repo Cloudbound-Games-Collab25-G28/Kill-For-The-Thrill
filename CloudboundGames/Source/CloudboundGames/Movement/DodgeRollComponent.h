@@ -22,18 +22,23 @@ public:
 	void RollPlayer();
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void ResetRollCooldown();
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void OnDashFinished();
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, meta=(AllowPrivateAccess = "true"))
     FVector GetLaunchVelocity() const;
 
 	TObjectPtr<class ACharacter> Character;
+	TObjectPtr<class UHealthComponent> HealthComp;
 
 private:
 	/** Roll properties */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category=Roll, meta=(AllowPrivateAccess = "true"))
 	bool bCanRoll = true;
-	UPROPERTY(Editanywhere, BlueprintReadWrite, Category=Roll, meta=(AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Roll, meta=(AllowPrivateAccess = "true"))
 	float RollCooldownTime = 2.0f;
-	UPROPERTY(Editanywhere, BlueprintReadWrite, Category=Roll, meta=(AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Roll, meta=(AllowPrivateAccess = "true"))
+	float InvincibilityDuration = 0.25f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Roll, meta=(AllowPrivateAccess = "true"))
 	float RollSpeed;
 };

@@ -32,7 +32,7 @@ public:
 	FEnhancedInputActionValueBinding* MoveHorizontalActionBinding;
 	FEnhancedInputActionValueBinding* MoveVerticalActionBinding;
 
-	/** Roll component */
+	/** Components */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components, meta = (AllowPrivateAccess = "true"))
 	class UDodgeRollComponent* DodgeRollComponent;
 
@@ -44,5 +44,8 @@ private:
 	/** Camera boom positioning the camera above the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components, meta = (AllowPrivateAccess = "true"))
+	class UHealthComponent* HealthComponent;
 };
 
