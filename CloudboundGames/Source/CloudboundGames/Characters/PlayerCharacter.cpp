@@ -6,6 +6,7 @@
 #include "UObject/ConstructorHelpers.h"
 #include "Camera/CameraComponent.h"
 #include "CloudboundGames/Movement/DodgeRollComponent.h"
+#include "CloudboundGames/Stats/HealthComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Engine/World.h"
@@ -28,13 +29,15 @@ APlayerCharacter::APlayerCharacter() : ACharacterBase()
 
 	DodgeRollComponent = CreateDefaultSubobject<UDodgeRollComponent>(TEXT("DodgeRollComp"));
 	DodgeRollComponent->Character = this;
+	
 }
 
 void APlayerCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	DodgeRollComponent = FindComponentByClass<UDodgeRollComponent>();
+	HealthComponent = FindComponentByClass<UHealthComponent>();
+	DodgeRollComponent->HealthComp = HealthComponent;
 }
 
 void APlayerCharacter::OnHorizontalMovementTriggered_Implementation()
