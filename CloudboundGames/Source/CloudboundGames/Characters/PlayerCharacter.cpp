@@ -5,6 +5,7 @@
 #include "EnhancedInputComponent.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Camera/CameraComponent.h"
+#include "CloudboundGames/Movement/DodgeRollComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Engine/World.h"
@@ -24,6 +25,16 @@ APlayerCharacter::APlayerCharacter() : ACharacterBase()
 	TopDownCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("TopDownCamera"));
 	TopDownCameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	TopDownCameraComponent->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+
+	DodgeRollComponent = CreateDefaultSubobject<UDodgeRollComponent>(TEXT("DodgeRollComp"));
+	DodgeRollComponent->Character = this;
+}
+
+void APlayerCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	DodgeRollComponent = FindComponentByClass<UDodgeRollComponent>();
 }
 
 void APlayerCharacter::OnHorizontalMovementTriggered_Implementation()
@@ -40,26 +51,4 @@ void APlayerCharacter::OnVerticalMovementTriggered_Implementation()
 	ControlRot.Pitch = 0.0f;
 	FVector ForwardVector = UKismetMathLibrary::GetForwardVector(ControlRot);
 	AddMovementInput(ForwardVector, MoveVerticalActionBinding->GetValue().Get<float>());
-}
-
-void APlayerCharacter::OnRollTriggered_Implementation()
-{
-	if (bCanRoll)
-	{
-		bCanRoll = false;
-		LaunchCharacter(GetLaunchVelocity(), false, false);
-		
-		FTimerHandle RollTimerHandle;
-		GetWorld()->GetTimerManager().SetTimer(RollTimerHandle, this, &APlayerCharacter::ResetRollCooldown, RollCooldownTime, false);
-	}
-}
-
-void APlayerCharacter::ResetRollCooldown_Implementation()
-{
-	bCanRoll = true;
-}
-
-FVector APlayerCharacter::GetLaunchVelocity_Implementation() const
-{
-	return GetVelocity() * RollVelocityMultiplier;
 }
