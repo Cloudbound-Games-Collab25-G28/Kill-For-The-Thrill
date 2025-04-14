@@ -27,6 +27,7 @@ APlayerCharacter::APlayerCharacter() : ACharacterBase()
 	TopDownCameraComponent->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 	DodgeRollComponent = CreateDefaultSubobject<UDodgeRollComponent>(TEXT("DodgeRollComp"));
+	DodgeRollComponent->Character = this;
 }
 
 void APlayerCharacter::PostInitializeComponents()

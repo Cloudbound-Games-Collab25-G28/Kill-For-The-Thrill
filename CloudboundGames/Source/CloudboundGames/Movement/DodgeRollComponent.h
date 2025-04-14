@@ -26,6 +26,8 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, meta=(AllowPrivateAccess = "true"))
     FVector GetLaunchVelocity() const;
 
+	TObjectPtr<class ACharacter> Character;
+
 private:
 	/** Roll properties */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category=Roll, meta=(AllowPrivateAccess = "true"))

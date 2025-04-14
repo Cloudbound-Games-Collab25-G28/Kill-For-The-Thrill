@@ -3,6 +3,9 @@
 
 #include "DodgeRollComponent.h"
 
+#include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
+
 
 // Sets default values for this component's properties
 UDodgeRollComponent::UDodgeRollComponent()
@@ -26,6 +29,13 @@ void UDodgeRollComponent::OnRollTriggered_Implementation()
 void UDodgeRollComponent::RollPlayer_Implementation()
 {
 	GetOwner()->AddActorWorldOffset(GetLaunchVelocity());
+
+	if (bool isMotionActive = Character->GetCharacterMovement()->IsActive(); !isMotionActive)
+	{
+		Character->GetCharacterMovement()->Activate();
+	}
+	
+	Character->LaunchCharacter(GetLaunchVelocity(), false, false);
 }
 
 void UDodgeRollComponent::ResetRollCooldown_Implementation()
