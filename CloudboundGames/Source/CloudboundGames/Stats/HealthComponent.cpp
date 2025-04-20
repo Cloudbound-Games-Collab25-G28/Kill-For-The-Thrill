@@ -14,6 +14,11 @@ void UHealthComponent::SetHealth_Implementation(float NewHealth)
 {
 }
 
+void UHealthComponent::SetInvincibility_Implementation(bool newValue)
+{
+	this->isInvincible = isInvincible;
+}
+
 // Called when the game starts
 void UHealthComponent::BeginPlay()
 {

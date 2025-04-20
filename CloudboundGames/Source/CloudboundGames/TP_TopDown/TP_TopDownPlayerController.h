@@ -7,6 +7,7 @@
 #include "GameFramework/PlayerController.h"
 #include "TP_TopDownPlayerController.generated.h"
 
+class UDodgeRollComponent;
 class APlayerCharacter;
 /** Forward declaration to improve compiling times */
 class UNiagaraSystem;

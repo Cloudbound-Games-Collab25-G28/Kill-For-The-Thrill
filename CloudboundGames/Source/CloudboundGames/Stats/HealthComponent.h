@@ -27,13 +27,19 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	float Health = 0.0f;
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float MaxHealth = 100.0f;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void SetHealth(float NewHealth);
 
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void SetInvincibility(bool newValue);
+
 protected:
+	UPROPERTY(BlueprintReadOnly, Category=Health, meta=(AllowPrivateAccess=true))
+	bool isInvincible = false;
+	
 	// Called when the game starts
 	virtual void BeginPlay() override;
 };
