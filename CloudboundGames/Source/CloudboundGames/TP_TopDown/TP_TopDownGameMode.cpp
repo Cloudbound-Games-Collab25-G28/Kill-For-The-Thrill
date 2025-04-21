@@ -37,7 +37,7 @@ void ATP_TopDownGameMode::SetupHUD_Implementation()
 	HUDWidget = CreateWidget<UHUDWidget_Base, APlayerController*>(PlayerController, HUDWidgetType, "HUD");
 
 	// Setup Health Events
-	UHealthComponent* healthComponent = PlayerController->GetPawn()->FindComponentByClass<UHealthComponent>();
+	UHealthComponent* healthComponent = PlayerController->PlayerPawn->FindComponentByClass<UHealthComponent>();
 	ULivesComponent* lifeComponent = PlayerController->PlayerPawn->FindComponentByClass<ULivesComponent>();
 	if (healthComponent && lifeComponent)
 	{
