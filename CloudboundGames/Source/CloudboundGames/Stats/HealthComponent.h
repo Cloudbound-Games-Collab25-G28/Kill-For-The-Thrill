@@ -27,7 +27,7 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	float Health = 0.0f;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
 	float MaxHealth = 100.0f;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
