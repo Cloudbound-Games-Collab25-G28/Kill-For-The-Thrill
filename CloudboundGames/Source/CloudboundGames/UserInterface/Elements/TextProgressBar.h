@@ -11,7 +11,7 @@ class UTextBlock;
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType)
 class CLOUDBOUNDGAMES_API UTextProgressBar : public UUserWidget
 {
 	GENERATED_BODY()
