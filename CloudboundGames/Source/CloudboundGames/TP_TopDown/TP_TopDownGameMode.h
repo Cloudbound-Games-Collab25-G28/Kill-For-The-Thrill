@@ -12,6 +12,8 @@ class ATP_TopDownPlayerController;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnStartWave, int, WaveNumber, int, EnemiesKilled, int, TotalEnemies, int,
                                               MaterialsCollected);
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnNotify);
+
 UCLASS(minimalapi)
 class ATP_TopDownGameMode : public AGameModeBase
 {
@@ -37,8 +39,11 @@ public:
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
 	FOnStartWave OnWaveStart;
 
+	UPROPERTY(BlueprintCallable, BlueprintAssignable)
+	FOnNotify OnGameOver;
+
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void OnPlayerKilled(class ULivesComponent* livesComponent);
+	void OnPlayerGameOver(class ULivesComponent* livesComponent);
 
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<ATP_TopDownPlayerController> PlayerController;
