@@ -21,6 +21,7 @@ void UDodgeRollComponent::OnRollTriggered_Implementation()
 	{
 		bCanRoll = false;
 		RollPlayer();
+		OnRollStarted.Broadcast();
 		
 		FTimerHandle RollTimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(RollTimerHandle, this, &UDodgeRollComponent::ResetRollCooldown, RollCooldownTime, false);
@@ -51,6 +52,7 @@ void UDodgeRollComponent::OnDashFinished_Implementation()
 void UDodgeRollComponent::ResetRollCooldown_Implementation()
 {
 	bCanRoll = true;
+	OnRollRecovered.Broadcast();
 }
 
 FVector UDodgeRollComponent::GetLaunchVelocity_Implementation() const

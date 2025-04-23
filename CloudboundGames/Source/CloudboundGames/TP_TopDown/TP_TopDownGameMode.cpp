@@ -42,7 +42,7 @@ void ATP_TopDownGameMode::SetupHUD_Implementation()
 	if (healthComponent && lifeComponent)
 	{
 		lifeComponent->SetupComponent(healthComponent);
-		lifeComponent->OnAllLivesLost.AddUniqueDynamic(this, &ATP_TopDownGameMode::OnPlayerKilled);
+		lifeComponent->OnAllLivesLost.AddUniqueDynamic(this, &ATP_TopDownGameMode::OnPlayerGameOver);
 		
 		HUDWidget->SetupHealthBar(healthComponent);
 		HUDWidget->SetupLivesIndicator(lifeComponent);
@@ -75,14 +75,16 @@ void ATP_TopDownGameMode::StartupGame_Implementation()
 {
 }
 
-void ATP_TopDownGameMode::OnPlayerKilled_Implementation(class ULivesComponent* livesComponent)
+void ATP_TopDownGameMode::OnPlayerGameOver_Implementation(ULivesComponent* livesComponent)
 {
-	livesComponent->OnAllLivesLost.RemoveDynamic(this, &ATP_TopDownGameMode::OnPlayerKilled);
+	livesComponent->OnAllLivesLost.RemoveDynamic(this, &ATP_TopDownGameMode::OnPlayerGameOver);
 	
 	PlayerController->UnPossess();
 	GameOverWidget = CreateWidget<UUserWidget, APlayerController*>(PlayerController, GameOverWidgetType, "GameOver");
 	HUDWidget->RemoveFromParent();
 	GameOverWidget->AddToViewport();
+
+	OnGameOver.Broadcast();
 }
 
 void ATP_TopDownGameMode::Handle_GameWon_Implementation()
