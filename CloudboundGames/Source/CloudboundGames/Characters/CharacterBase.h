@@ -15,6 +15,8 @@ public:
 	// Sets default values for this actor's properties
 	ACharacterBase();
 
+	virtual void BeginPlay() override;
+
 	UFUNCTION(BlueprintNativeEvent)
 	void SetupAudioEvents();
 };
