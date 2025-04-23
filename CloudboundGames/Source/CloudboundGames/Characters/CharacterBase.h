@@ -14,4 +14,7 @@ class CLOUDBOUNDGAMES_API ACharacterBase : public ACharacter
 public:
 	// Sets default values for this actor's properties
 	ACharacterBase();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void SetupAudioEvents();
 };
