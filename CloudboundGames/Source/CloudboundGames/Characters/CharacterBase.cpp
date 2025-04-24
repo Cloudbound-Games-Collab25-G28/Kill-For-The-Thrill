@@ -27,3 +27,14 @@ ACharacterBase::ACharacterBase()
 	GetCharacterMovement()->bConstrainToPlane = true;
 	GetCharacterMovement()->bSnapToPlaneAtStart = true;
 }
+
+void ACharacterBase::BeginPlay()
+{
+	Super::BeginPlay();
+
+	SetupAudioEvents();
+}
+
+void ACharacterBase::SetupAudioEvents_Implementation()
+{
+}

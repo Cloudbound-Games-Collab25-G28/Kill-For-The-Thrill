@@ -6,8 +6,9 @@
 #include "Components/ActorComponent.h"
 #include "DodgeRollComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnRollEvent);
 
-UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), BlueprintType)
 class CLOUDBOUNDGAMES_API UDodgeRollComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -24,6 +25,11 @@ public:
 	void ResetRollCooldown();
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void OnDashFinished();
+
+	UPROPERTY(BlueprintAssignable)
+	FOnRollEvent OnRollStarted;
+	UPROPERTY(BlueprintAssignable)
+	FOnRollEvent OnRollRecovered;
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, meta=(AllowPrivateAccess = "true"))
     FVector GetLaunchVelocity() const;
