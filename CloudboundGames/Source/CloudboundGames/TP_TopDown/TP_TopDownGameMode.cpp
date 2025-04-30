@@ -12,6 +12,7 @@
 
 #include "CloudboundGames/UserInterface/Widgets/HUDWidget_Base.h"
 #include "CloudboundGames/UserInterface/Widgets/WeaponSelect_Base.h"
+#include "Kismet/GameplayStatics.h"
 
 ATP_TopDownGameMode::ATP_TopDownGameMode()
 {
@@ -77,6 +78,7 @@ void ATP_TopDownGameMode::StartupGame_Implementation()
 
 void ATP_TopDownGameMode::OnPlayerGameOver_Implementation(ULivesComponent* livesComponent)
 {
+	UGameplayStatics::SetGamePaused(GetWorld(), true);
 	livesComponent->OnAllLivesLost.RemoveDynamic(this, &ATP_TopDownGameMode::OnPlayerGameOver);
 	
 	PlayerController->UnPossess();
@@ -89,6 +91,8 @@ void ATP_TopDownGameMode::OnPlayerGameOver_Implementation(ULivesComponent* lives
 
 void ATP_TopDownGameMode::Handle_GameWon_Implementation()
 {
+	UGameplayStatics::SetGamePaused(GetWorld(), true);
+	
 	// show win screen
 	PlayerController->UnPossess();
 	WinWidget = CreateWidget<UUserWidget, APlayerController*>(PlayerController, WinWidgetType, "WinGame");
