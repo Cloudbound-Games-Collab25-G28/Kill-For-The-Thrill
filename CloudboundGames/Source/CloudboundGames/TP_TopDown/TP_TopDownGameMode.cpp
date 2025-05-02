@@ -81,7 +81,6 @@ void ATP_TopDownGameMode::OnPlayerGameOver_Implementation(ULivesComponent* lives
 	UGameplayStatics::SetGamePaused(GetWorld(), true);
 	livesComponent->OnAllLivesLost.RemoveDynamic(this, &ATP_TopDownGameMode::OnPlayerGameOver);
 	
-	PlayerController->UnPossess();
 	GameOverWidget = CreateWidget<UUserWidget, APlayerController*>(PlayerController, GameOverWidgetType, "GameOver");
 	HUDWidget->RemoveFromParent();
 	GameOverWidget->AddToViewport();
@@ -94,7 +93,6 @@ void ATP_TopDownGameMode::Handle_GameWon_Implementation()
 	UGameplayStatics::SetGamePaused(GetWorld(), true);
 	
 	// show win screen
-	PlayerController->UnPossess();
 	WinWidget = CreateWidget<UUserWidget, APlayerController*>(PlayerController, WinWidgetType, "WinGame");
 	UWidgetLayoutLibrary::RemoveAllWidgets(GetWorld());
 	WinWidget->AddToViewport();
