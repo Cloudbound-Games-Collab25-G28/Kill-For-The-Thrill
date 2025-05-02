@@ -18,24 +18,24 @@ void UHUDWidget_Base::NativeConstruct()
 
 void UHUDWidget_Base::SetupHealthBar(UHealthComponent* HealthComponent)
 {
-	HealthBar->UpdateValue(HealthComponent->MaxHealth, HealthComponent->MaxHealth);
+	HealthBar->UpdateValue(HealthComponent->GetMaxHealth(), HealthComponent->GetMaxHealth());
 	HealthComponent->OnHealthChanged.AddDynamic(this, &UHUDWidget_Base::UpdateHealthBar);
 }
 
 void UHUDWidget_Base::UpdateHealthBar_Implementation(UHealthComponent* HealthComponent)
 {
-	HealthBar->UpdateValue(HealthComponent->Health, HealthComponent->MaxHealth);
+	HealthBar->UpdateValue(HealthComponent->GetHealth(), HealthComponent->GetMaxHealth());
 }
 
 void UHUDWidget_Base::SetupLivesIndicator(class ULivesComponent* LivesComponent)
 {
-	LivesCounter->UpdateLives(LivesComponent->MaxLives, LivesComponent->CurrentLives);
-	LivesComponent->OnLifeLost.AddDynamic(this, &UHUDWidget_Base::UpdatesLives);
+	LivesCounter->UpdateLives(LivesComponent->GetMaxLives(), LivesComponent->GetLives());
+	LivesComponent->OnLivesChanged.AddDynamic(this, &UHUDWidget_Base::UpdatesLives);
 }
 
 void UHUDWidget_Base::UpdatesLives_Implementation(ULivesComponent* LivesComponent)
 {
-	LivesCounter->UpdateLives(LivesComponent->MaxLives, LivesComponent->CurrentLives);
+	LivesCounter->UpdateLives(LivesComponent->GetMaxLives(), LivesComponent->GetLives());
 }
 
 void UHUDWidget_Base::SetupWaveIndicator(ATP_TopDownGameMode* WaveManager)
