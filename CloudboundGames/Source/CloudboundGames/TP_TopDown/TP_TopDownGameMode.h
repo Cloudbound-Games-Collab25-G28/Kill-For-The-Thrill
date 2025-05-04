@@ -36,6 +36,9 @@ public:
 	UFUNCTION(BlueprintNativeEvent)
 	void Handle_GameWon();
 
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void Handle_GamePaused();
+
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
 	FOnStartWave OnWaveStart;
 
@@ -67,6 +70,10 @@ private:
 	TObjectPtr<UUserWidget> GameOverWidget;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=UI, meta=(AllowPrivateAccess = "true"))
 	TSubclassOf<UUserWidget> GameOverWidgetType;
+
+	TObjectPtr<class UUserWidget> PauseWidget;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=UI, meta=(AllowPrivateAccess = "true"))
+	TSubclassOf<UUserWidget> PauseWidgetType;
 	
 	UPROPERTY(BlueprintReadWrite, Category=Waves, meta=(AllowPrivateAccess = "true"))
 	int WaveNumber = 0;
