@@ -8,6 +8,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnKilled, class UHealthComponent*, HealthComponent);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChanged, UHealthComponent*, HealthComponent);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDamageTaken, float, damageTaken);
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent, IsBlueprintBase=true))
 class CLOUDBOUNDGAMES_API UHealthComponent : public UActorComponent
@@ -23,6 +24,9 @@ public:
 
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
 	FOnHealthChanged OnHealthChanged;
+
+	UPROPERTY(BlueprintCallable, BlueprintAssignable)
+	FOnDamageTaken OnCharacterTakesDamage;
 
 	UPROPERTY(BlueprintReadWrite)
 	float Health = 0.0f;
