@@ -50,6 +50,8 @@ void ATP_TopDownGameMode::SetupHUD_Implementation()
 	}
 
 	HUDWidget->SetupWaveIndicator(this);
+
+	PlayerController->OnPauseGame.AddDynamic(this, &ATP_TopDownGameMode::Handle_GamePaused);
 	
 	HUDWidget->AddToViewport();
 }
@@ -96,4 +98,26 @@ void ATP_TopDownGameMode::Handle_GameWon_Implementation()
 	WinWidget = CreateWidget<UUserWidget, APlayerController*>(PlayerController, WinWidgetType, "WinGame");
 	UWidgetLayoutLibrary::RemoveAllWidgets(GetWorld());
 	WinWidget->AddToViewport();
+}
+
+void ATP_TopDownGameMode::Handle_GamePaused_Implementation()
+{
+	if (UGameplayStatics::IsGamePaused(GetWorld()))
+	{
+		PauseWidget->RemoveFromParent();
+		UGameplayStatics::SetGamePaused(GetWorld(), false);
+
+		PlayerController->SetInputMode(FInputModeGameOnly());
+		
+		return;
+	}
+	
+	if (!PauseWidget)
+	{
+		PauseWidget = CreateWidget<UUserWidget, APlayerController*>(PlayerController, PauseWidgetType, "PauseMenu");
+	}
+	PauseWidget->AddToViewport();
+	UGameplayStatics::SetGamePaused(GetWorld(), true);
+
+	PlayerController->SetInputMode(FInputModeGameAndUI());
 }
