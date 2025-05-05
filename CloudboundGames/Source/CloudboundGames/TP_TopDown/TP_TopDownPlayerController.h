@@ -16,6 +16,8 @@ class UInputAction;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnGamePaused);
+
 UCLASS()
 class ATP_TopDownPlayerController : public APlayerController
 {
@@ -37,9 +39,17 @@ public:
 	/** Roll Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	UInputAction* RollAction;
+	/** Pause Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
+	UInputAction* PauseAction;
 
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<APlayerCharacter> PlayerPawn;
+
+	UPROPERTY(BlueprintCallable, BlueprintAssignable)
+	FOnGamePaused OnPauseGame;
+	
+	void OnPauseTriggered();
 
 protected:
 	virtual void SetupInputComponent() override;
