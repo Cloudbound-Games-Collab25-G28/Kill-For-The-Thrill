@@ -8,7 +8,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnRollEvent);
 
-UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), BlueprintType)
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), BlueprintType, Blueprintable)
 class CLOUDBOUNDGAMES_API UDodgeRollComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -34,7 +34,7 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, meta=(AllowPrivateAccess = "true"))
     FVector GetLaunchVelocity() const;
 
-	TObjectPtr<class ACharacter> Character;
+	TObjectPtr<ACharacter> Character;
 	TObjectPtr<class UHealthComponent> HealthComp;
 
 private:
