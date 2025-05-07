@@ -5,7 +5,9 @@
 #include "../Characters/PlayerCharacter.h"
 #include "Engine/World.h"
 #include "EnhancedInputSubsystems.h"
+#include "Blueprint/UserWidget.h"
 #include "CloudboundGames/Movement/DodgeRollComponent.h"
+#include "CloudboundGames/UserInterface/Widgets/HUDWidget_Base.h"
 #include "Engine/LocalPlayer.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -47,6 +49,12 @@ void ATP_TopDownPlayerController::OnPossess(APawn* InPawn)
 	TopDownCharacter->MoveVerticalActionBinding = &EnhancedInputComponent->BindActionValue(VerticalMovementAction);
 
 	EnhancedInputComponent->BindAction(RollAction, ETriggerEvent::Started, TopDownCharacter->DodgeRollComponent, &UDodgeRollComponent::OnRollTriggered);
+	EnhancedInputComponent->BindAction(PauseAction, ETriggerEvent::Started, this, &ATP_TopDownPlayerController::OnPauseTriggered);
+}
+
+void ATP_TopDownPlayerController::OnPauseTriggered()
+{
+	OnPauseGame.Broadcast();
 }
 
 void ATP_TopDownPlayerController::SetupInputComponent()
