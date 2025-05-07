@@ -10,3 +10,7 @@ void USettingsCategory::ResetToDefaults_Implementation()
 void USettingsCategory::SaveSettings_Implementation()
 {
 }
+
+void USettingsCategory::LoadSettings_Implementation()
+{
+}
