@@ -29,8 +29,7 @@ void ATP_TopDownGameMode::PostLogin(APlayerController* NewPlayer)
 	{
 		SetupHUD();
 	}
-	
-	ChooseWeapon();
+
 }
 
 void ATP_TopDownGameMode::SetupHUD_Implementation()
