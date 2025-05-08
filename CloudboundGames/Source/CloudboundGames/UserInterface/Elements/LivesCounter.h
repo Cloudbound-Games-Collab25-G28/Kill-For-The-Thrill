@@ -34,6 +34,10 @@ public:
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void CreateLivesWidgets(int numToCreate);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void UpdateLivesVisual(int currentLives);
+	
 	void UpdateLives(int totalLives, int currentLives);
 
 private:

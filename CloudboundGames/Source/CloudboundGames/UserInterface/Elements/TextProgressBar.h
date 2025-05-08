@@ -25,4 +25,6 @@ class CLOUDBOUNDGAMES_API UTextProgressBar : public UUserWidget
 public:
 	UFUNCTION(BlueprintCallable)
 	void UpdateValue(float newValue, float maxValue);
+
+
 };

@@ -25,7 +25,7 @@ public:
 	UFUNCTION(BlueprintNativeEvent)
 	void SetupHUD();
 
-	UFUNCTION(BlueprintNativeEvent)
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void ChooseWeapon();
 	UFUNCTION(BlueprintNativeEvent)
 	void ApplyWeapon(EWeaponType Class);
