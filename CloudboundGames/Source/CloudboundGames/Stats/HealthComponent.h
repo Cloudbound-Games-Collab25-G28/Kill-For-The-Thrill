@@ -38,6 +38,15 @@ public:
 	void SetHealth(float NewHealth);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void SetMaxHealth(float NewHealth);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	float GetHealth() const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	float GetMaxHealth() const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void SetInvincibility(bool newValue);
 
 protected:

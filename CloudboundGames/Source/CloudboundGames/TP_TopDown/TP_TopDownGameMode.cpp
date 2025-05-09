@@ -29,8 +29,7 @@ void ATP_TopDownGameMode::PostLogin(APlayerController* NewPlayer)
 	{
 		SetupHUD();
 	}
-	
-	ChooseWeapon();
+
 }
 
 void ATP_TopDownGameMode::SetupHUD_Implementation()
@@ -106,8 +105,6 @@ void ATP_TopDownGameMode::Handle_GamePaused_Implementation()
 	{
 		PauseWidget->RemoveFromParent();
 		UGameplayStatics::SetGamePaused(GetWorld(), false);
-
-		PlayerController->SetInputMode(FInputModeGameOnly());
 		
 		return;
 	}
@@ -118,6 +115,4 @@ void ATP_TopDownGameMode::Handle_GamePaused_Implementation()
 	}
 	PauseWidget->AddToViewport();
 	UGameplayStatics::SetGamePaused(GetWorld(), true);
-
-	PlayerController->SetInputMode(FInputModeGameAndUI());
 }

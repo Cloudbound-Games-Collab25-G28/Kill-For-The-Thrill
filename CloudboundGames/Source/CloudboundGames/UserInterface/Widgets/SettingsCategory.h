@@ -19,4 +19,6 @@ public:
 	void ResetToDefaults();
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void SaveSettings();
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void LoadSettings();
 };
