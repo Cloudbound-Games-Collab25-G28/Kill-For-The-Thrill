@@ -7,7 +7,7 @@
 #include "LivesComponent.generated.h"
 
 class UHealthComponent;
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLifeLost, class ULivesComponent*, LivesComponent);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLivesChanged, class ULivesComponent*, LivesComponent);
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class CLOUDBOUNDGAMES_API ULivesComponent : public UActorComponent
@@ -21,14 +21,17 @@ public:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
 	int MaxLives = 3;
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadOnly)
 	int CurrentLives = 3;
 
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
-	FOnLifeLost OnAllLivesLost;
+	FOnLivesChanged OnLivesChanged;
 
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
-	FOnLifeLost OnLifeLost;
+	FOnLivesChanged OnAllLivesLost;
+
+	UPROPERTY(BlueprintCallable, BlueprintAssignable)
+	FOnLivesChanged OnLifeLost;
 
 	void SetupComponent(UHealthComponent* HealthComponent);
 
@@ -37,4 +40,16 @@ public:
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void OnKilled(UHealthComponent* HealthComponent);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void SetMaxLives(int max);
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void SetLives(int lives);
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	int GetMaxLives() const;
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	int GetLives() const;
 };

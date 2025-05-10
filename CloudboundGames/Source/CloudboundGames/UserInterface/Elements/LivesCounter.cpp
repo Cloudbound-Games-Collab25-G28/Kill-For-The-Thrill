@@ -27,17 +27,12 @@ void ULivesCounter::NativeConstruct()
 	
 }
 
-void ULivesCounter::UpdateLives(int totalLives, int currentLives)
+void ULivesCounter::UpdateLivesVisual_Implementation(int currentLives)
 {
-	if (totalLives > LivesDisplayed)
-	{
-		CreateLivesWidgets(totalLives - LivesDisplayed);
-		LivesDisplayed = LivesIcons.Num();
-	}
-
 	int index = 0;
 	for (ULifeIcon* icon : LivesIcons)
 	{
+		icon->SetActive(true);
 		if (index < currentLives)
 		{
 			icon->SetActive(true);
@@ -48,4 +43,15 @@ void ULivesCounter::UpdateLives(int totalLives, int currentLives)
 		}
 		index++;
 	}
+}
+
+void ULivesCounter::UpdateLives(int totalLives, int currentLives)
+{
+	if (totalLives > LivesDisplayed)
+	{
+		CreateLivesWidgets(totalLives - LivesDisplayed);
+		LivesDisplayed = totalLives;
+	}
+
+	UpdateLivesVisual(currentLives);
 }
